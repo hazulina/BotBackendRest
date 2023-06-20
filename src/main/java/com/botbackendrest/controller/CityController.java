@@ -8,37 +8,37 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/cities")
 @AllArgsConstructor
 public class CityController {
     private final CityService cityService;
 
-    @GetMapping("/cities")
+    @GetMapping()
     public List<City> getAllCities() {
         return cityService.getAllCities();
     }
 
-    @GetMapping("/cities/{id}")
+    @GetMapping("/{id}")
     public City getCityById(@PathVariable int id) {
         return cityService.getCity(id);
     }
 
-    @PostMapping("/cities")
+    @PostMapping()
     public City addNewCity(@RequestBody City city) {
         cityService.saveOrUpdateCity(city);
         return city;
     }
 
-    @PutMapping("/cities")
+    @PutMapping()
     public City updateCity(@RequestBody City city) {
         cityService.saveOrUpdateCity(city);
         return city;
     }
 
-    @DeleteMapping("/cities/{id}")
+    @DeleteMapping("/{id}")
     public String deleteCity(@PathVariable int id) {
         cityService.deleteCity(id);
-        return "City with id: "+ id + " was deleted";
+        return "City with id: " + id + " was deleted";
     }
 
 }

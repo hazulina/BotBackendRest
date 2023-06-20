@@ -4,12 +4,9 @@ import com.botbackendrest.entity.WeatherDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -50,7 +47,6 @@ public class WeatherServiceImpl implements WeatherService {
     private WeatherDto convertJsonToDto(String response) {
         try {
             JsonNode node = objectMapper.readTree(response);
-          //  String json = "{id:"+node.path("id").asInt() +"}"; example
             return new WeatherDto(
                     node.path("id").asInt(),
                     node.path("name").asText(),
