@@ -1,16 +1,12 @@
 package com.botbackendrest.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Table(name = "users")
-@Data
 @DynamicInsert
-@AllArgsConstructor
 @NoArgsConstructor
 public class User extends Structures {
     @Id
@@ -28,4 +24,28 @@ public class User extends Structures {
         this.chatId = chatId;
     }
 
+    public User(int chatId, String userLanguage) {
+        this.chatId = chatId;
+        this.userLanguage = userLanguage;
+    }
+
+    public void setChatId(int chatId) {
+        this.chatId = chatId;
+    }
+
+    public void setUserLanguage(String userLanguage) {
+        this.userLanguage = userLanguage;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public int getChatId() {
+        return chatId;
+    }
+
+    public String getUserLanguage() {
+        return userLanguage;
+    }
 }

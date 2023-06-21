@@ -8,28 +8,28 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/links")
 @AllArgsConstructor
 public class UserCityLinksController {
     private final UserCityLinkService linkService;
 
-    @GetMapping("/links")
+    @GetMapping()
     public List<UserCityLInk> getAllLinks(){
        return linkService.getAllLinks();
     }
-    @GetMapping("/links/{id}")
+    @GetMapping("/{id}")
     public UserCityLInk getLinkById(@PathVariable int id){
         return linkService.getLinkById(id);
     }
-    @PostMapping("/links")
+    @PostMapping()
     public void addNewLink(@RequestBody UserCityLInk link){
         linkService.saveOrUpdateLink(link);
     }
-    @PutMapping("/links")
+    @PutMapping()
     public void updateLink(@RequestBody UserCityLInk link){
         linkService.saveOrUpdateLink(link);
     }
-    @DeleteMapping("/links/{id}")
+    @DeleteMapping("/{id}")
     public void deleteLink(@PathVariable int id){
         linkService.deleteLink(id);
     }

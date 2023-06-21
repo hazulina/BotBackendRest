@@ -1,79 +1,69 @@
 package com.botbackendrest.controller;
 
-import com.botbackendrest.entity.Structures;
 import com.botbackendrest.entity.User;
-import com.botbackendrest.service.MappingVisitor;
 import com.botbackendrest.service.userService.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;
 
 
-    @GetMapping("/users")
+    @GetMapping()
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/users/{chatId}")
+    @GetMapping("/{chatId}")
     public User getUserByChatId(@PathVariable int chatId) {
         return userService.getUserByChatId(chatId);
     }
 
-    @GetMapping("/users/{chatId}/language")
-    public ResponseEntity<?> getUserLangByChatId(@PathVariable String chatId) {
+    @GetMapping("/{chatId}/language")
+    public ResponseEntity<?> getUserLanguageByChatId(@PathVariable int chatId) {
         try {
-            return new ResponseEntity<>(
-                    userService.getUserByChatId(Integer.parseInt(chatId)).getUserLanguage(),
-                    HttpStatusCode.valueOf(200));
+            String userLanguage = userService.getUserByChatId(chatId).getUserLanguage();
+            return ResponseEntity.ok(userLanguage);
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    "no such user",
-                    HttpStatusCode.valueOf(404));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No such user");
         }
     }
 
-    @PostMapping("/users")
-    public ResponseEntity<?> addNewUser(@RequestBody String body) {
+    @PostMapping()
+    public ResponseEntity<?> addNewUser(@RequestBody int chatId) {
         try {
-            userService.saveOrUpdateUser(new User(Integer.parseInt(body)));
-            return new ResponseEntity<>("OK", HttpStatusCode.valueOf(200));
+            userService.saveOrUpdateUser(new User(chatId));
+            return ResponseEntity.ok("OK");
         } catch (Exception e) {
-            return new ResponseEntity<>("Already exist", HttpStatusCode.valueOf(400));
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("Already exist");
         }
     }
 
-    @PutMapping("/users")
+    @PutMapping()
     public void updateUser(@RequestBody User user) {
         userService.saveOrUpdateUser(user);
     }
 
-    @PutMapping("/users/language")
-    public ResponseEntity<?> updateUserLanguage(@RequestBody String request) {
+    @PutMapping("/language")
+    public ResponseEntity<?> updateUserLanguage(@RequestBody User user) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode node = mapper.readTree(request);
-            String chatId = node.path("chatId").asText();
-            String language = node.path("language").asText();
-            userService.updateUserLanguage(Integer.parseInt(chatId), language);
-            return new ResponseEntity<>("Language is updated", HttpStatusCode.valueOf(200));
+            userService.updateUserLanguage(user.getChatId(), user.getUserLanguage());
+            return ResponseEntity.ok("Language is updated");
         } catch (Exception e) {
-            return new ResponseEntity<>("Ooops! can't update language", HttpStatusCode.valueOf(400));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Ooops! can't update language");
         }
     }
 
-    @DeleteMapping("/users/{chatId}")
+    @DeleteMapping("/{chatId}")
     public void deleteUser(@PathVariable int chatId) {
         userService.deleteUserByChatId(chatId);
     }
