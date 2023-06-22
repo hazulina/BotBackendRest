@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "users")
 @DynamicInsert
@@ -27,6 +29,19 @@ public class User extends Structures {
     public User(int chatId, String userLanguage) {
         this.chatId = chatId;
         this.userLanguage = userLanguage;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return userId == user.userId && chatId == user.chatId && Objects.equals(userLanguage, user.userLanguage);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, chatId, userLanguage);
     }
 
     public void setChatId(int chatId) {
