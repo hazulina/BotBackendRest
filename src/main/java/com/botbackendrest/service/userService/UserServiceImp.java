@@ -20,7 +20,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User getUserByChatId(int chatId) {
-       Optional<User> optional = userRepository.findUserByChatId(chatId);
+        Optional<User> optional = userRepository.findUserByChatId(chatId);
         return optional.orElse(null);
     }
 
@@ -37,7 +37,9 @@ public class UserServiceImp implements UserService {
     @Override
     public void updateUserLanguage(int chatId, String language) {
         User user = getUserByChatId(chatId);
-        user.setUserLanguage(language);
-        saveOrUpdateUser(user);
+        if (user != null) {
+            user.setUserLanguage(language);
+            saveOrUpdateUser(user);
+        }
     }
 }

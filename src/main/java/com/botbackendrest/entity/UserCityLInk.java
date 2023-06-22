@@ -1,6 +1,5 @@
 package com.botbackendrest.entity;
 
-import com.botbackendrest.service.MappingVisitor;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,13 +10,13 @@ public class UserCityLInk extends Structures{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "link_id")
-    private int link_id;
+    private int linkId;
 
     @Column(name = "user_id")
-    private int linkedUser_id;
+    private int linkedUserId;
 
     @Column(name = "city_id")
-    private int linkedCity_id;
+    private int linkedCityId;
 
 
 }

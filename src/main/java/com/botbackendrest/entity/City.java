@@ -1,6 +1,5 @@
 package com.botbackendrest.entity;
 
-import com.botbackendrest.service.MappingVisitor;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,7 +11,7 @@ public class City extends Structures{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "city_id")
-    private int city_id;
+    private int cityId;
 
     @Column(name = "city_name")
     private String cityName;
@@ -30,7 +29,7 @@ public class City extends Structures{
     @Override
     public String toString() {
         return "City{" +
-                "id=" + city_id +
+                "id=" + cityId +
                 ", cityName='" + cityName + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +

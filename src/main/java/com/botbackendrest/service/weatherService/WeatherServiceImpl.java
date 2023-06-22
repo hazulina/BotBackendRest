@@ -26,21 +26,21 @@ public class WeatherServiceImpl implements WeatherService {
     private final RestTemplate restTemplate;
 
     @Override
-    public String getCurrWeatherByCityName(String cityName, String lang) {
-        URI url = new UriTemplate(weatherUrl).expand(cityName, apiKey,lang);
+    public String getCurrentWeatherByCityName(String cityName, String lang) {
+        URI url = new UriTemplate(weatherUrl).expand(cityName, apiKey, lang);
         ResponseEntity<String> response;
         try {
             response = restTemplate.getForEntity(url, String.class);
             System.out.println(response.getBody());
             return convertDtoToJson(convertJsonToDto(response.getBody()));
-        } catch (HttpClientErrorException e){
+        } catch (HttpClientErrorException e) {
             return e.getResponseBodyAsString();
         }
     }
 
 
     @Override
-    public WeatherDto getCurrWeatherByCityId(int cityId) { //TODO
+    public WeatherDto getCurrentWeatherByCityId(int cityId) {         //TODO
         return null;
     }
 
@@ -60,7 +60,8 @@ public class WeatherServiceImpl implements WeatherService {
             throw new RuntimeException("Error parsing JSON", e);
         }
     }
-    private String convertDtoToJson(WeatherDto weatherDto){
+
+    private String convertDtoToJson(WeatherDto weatherDto) {
         try {
             return objectMapper.writeValueAsString(weatherDto);
         } catch (JsonProcessingException e) {
