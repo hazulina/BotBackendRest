@@ -1,7 +1,7 @@
 package com.botbackendrest.service.pictureService;
 
-import org.springframework.http.ResponseEntity;
+import java.io.ByteArrayOutputStream;
 
 public interface PictureService {
-    ResponseEntity<byte[]> getPictureById(int pictureId);
+    ByteArrayOutputStream getPictureById(String folderName, String pictureId);
 }
