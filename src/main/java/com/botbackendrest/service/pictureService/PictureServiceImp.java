@@ -21,9 +21,9 @@ public class PictureServiceImp implements PictureService {
 
     @Override
     public ByteArrayOutputStream getPictureById(String folderName, String pictureId) {
-        String url = awsQueryUrl + "/" + folderName;
+        String url = folderName + "/" + pictureId + ".jpg";
         try {
-            S3Object s3object = amazonS3.getObject(new GetObjectRequest(url, pictureId));
+            S3Object s3object = amazonS3.getObject(new GetObjectRequest(awsQueryUrl, url));
 
             InputStream objectContent = s3object.getObjectContent();
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
