@@ -41,4 +41,3 @@ public class PictureServiceImp implements PictureService {
     public PictureServiceImp(AmazonS3 amazonS3) {
         this.amazonS3 = amazonS3;
     }
-}
