@@ -1,13 +1,11 @@
 package com.botbackendrest.entity;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-@AllArgsConstructor
 public class WeatherDto {
     private int cityId;
     private String cityName;
@@ -17,8 +15,21 @@ public class WeatherDto {
     private BigDecimal feelsLikeTemp;
     private BigDecimal windSpeed;
 
+    private byte[] pictureFromCloudStorage;
+
 
     public WeatherDto() {
 
+    }
+
+    public WeatherDto(int cityId, String cityName, String weatherType, String description,
+                      BigDecimal temperature, BigDecimal feelsLikeTemp, BigDecimal windSpeed) {
+        this.cityId = cityId;
+        this.cityName = cityName;
+        this.weatherType = weatherType;
+        this.description = description;
+        this.temperature = temperature;
+        this.feelsLikeTemp = feelsLikeTemp;
+        this.windSpeed = windSpeed;
     }
 }

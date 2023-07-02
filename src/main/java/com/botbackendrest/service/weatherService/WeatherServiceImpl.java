@@ -1,6 +1,7 @@
 package com.botbackendrest.service.weatherService;
 
 import com.botbackendrest.entity.WeatherDto;
+import com.botbackendrest.service.pictureService.PictureService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,12 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriTemplate;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.util.Random;
 
 @Slf4j
 @Service
@@ -24,18 +25,15 @@ public class WeatherServiceImpl implements WeatherService {
     private String apiKey;
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
+    private final PictureService pictureService;
 
     @Override
-    public String getCurrentWeatherByCityName(String cityName, String lang) {
+    public WeatherDto getCurrentWeatherByCityName(String cityName, String lang) {
         URI url = new UriTemplate(weatherUrl).expand(cityName, apiKey, lang);
         ResponseEntity<String> response;
-        try {
-            response = restTemplate.getForEntity(url, String.class);
-            System.out.println(response.getBody());
-            return convertDtoToJson(convertJsonToDto(response.getBody()));
-        } catch (HttpClientErrorException e) {
-            return e.getResponseBodyAsString();
-        }
+        response = restTemplate.getForEntity(url, String.class);
+        System.out.println(response.getBody());
+        return convertJsonToDto(response.getBody());
     }
 
 
@@ -47,7 +45,7 @@ public class WeatherServiceImpl implements WeatherService {
     private WeatherDto convertJsonToDto(String response) {
         try {
             JsonNode node = objectMapper.readTree(response);
-            return new WeatherDto(
+            WeatherDto weatherDto = new WeatherDto(
                     node.path("id").asInt(),
                     node.path("name").asText(),
                     node.path("weather").get(0).path("main").asText(),
@@ -55,23 +53,26 @@ public class WeatherServiceImpl implements WeatherService {
                     BigDecimal.valueOf(node.path("main").path("temp").asDouble()),
                     BigDecimal.valueOf(node.path("main").path("feels_like").asDouble()),
                     BigDecimal.valueOf(node.path("wind").path("speed").asDouble()));
-
+            weatherDto.setPictureFromCloudStorage(
+                    pictureService.getPictureById(
+                                    weatherDto.getWeatherType().toLowerCase(),
+                                    String.valueOf(getRandomPictureFromCloudStorage()))
+                            .toByteArray());
+            return weatherDto;
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Error parsing JSON", e);
         }
     }
 
-    private String convertDtoToJson(WeatherDto weatherDto) {
-        try {
-            return objectMapper.writeValueAsString(weatherDto);
-        } catch (JsonProcessingException e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
-        }
+    private int getRandomPictureFromCloudStorage() {
+        Random random = new Random();
+        return random.nextInt(16 - 1) + 1;
     }
 
-    public WeatherServiceImpl(ObjectMapper objectMapper, RestTemplate restTemplate) {
+
+    public WeatherServiceImpl(ObjectMapper objectMapper, RestTemplate restTemplate, PictureService pictureService) {
         this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
+        this.pictureService = pictureService;
     }
 }
