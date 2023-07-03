@@ -13,7 +13,7 @@ import java.io.InputStream;
 
 @Service
 @Slf4j
-public class PictureServiceImp implements PictureService {
+public class PictureServiceImpl implements PictureService {
 
     private final AmazonS3 amazonS3;
     @Value("${s3.query.url}")
@@ -41,7 +41,7 @@ public class PictureServiceImp implements PictureService {
         return outputStream;
     }
 
-    public PictureServiceImp(AmazonS3 amazonS3) {
+    public PictureServiceImpl(AmazonS3 amazonS3) {
         this.amazonS3 = amazonS3;
     }
 }

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class CityServiceImp implements CityService {
+public class CityServiceImpl implements CityService {
     private final CityRepository cityRepository;
 
 
