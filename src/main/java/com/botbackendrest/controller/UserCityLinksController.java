@@ -14,23 +14,27 @@ public class UserCityLinksController {
     private final UserCityLinkService linkService;
 
     @GetMapping()
-    public List<UserCityLInk> getAllLinks(){
-       return linkService.getAllLinks();
+    public List<UserCityLInk> getAllLinks() {
+        return linkService.getAllLinks();
     }
+
     @GetMapping("/{id}")
-    public UserCityLInk getLinkById(@PathVariable int id){
+    public UserCityLInk getLinkById(@PathVariable int id) {
         return linkService.getLinkById(id);
     }
+
     @PostMapping()
-    public void addNewLink(@RequestBody UserCityLInk link){
+    public void addNewLink(@RequestBody UserCityLInk link) {
         linkService.saveOrUpdateLink(link);
     }
+
     @PutMapping()
-    public void updateLink(@RequestBody UserCityLInk link){
+    public void updateLink(@RequestBody UserCityLInk link) {
         linkService.saveOrUpdateLink(link);
     }
+
     @DeleteMapping("/{id}")
-    public void deleteLink(@PathVariable int id){
+    public void deleteLink(@PathVariable int id) {
         linkService.deleteLink(id);
     }
 }

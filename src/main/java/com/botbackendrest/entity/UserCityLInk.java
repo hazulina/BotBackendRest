@@ -6,7 +6,7 @@ import lombok.Data;
 @Entity
 @Table(name = "user_city_links")
 @Data
-public class UserCityLInk extends Structures{
+public class UserCityLInk extends Structures {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "link_id")

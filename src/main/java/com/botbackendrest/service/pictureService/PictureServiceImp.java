@@ -22,22 +22,26 @@ public class PictureServiceImp implements PictureService {
     @Override
     public ByteArrayOutputStream getPictureById(String folderName, String pictureId) {
         String url = folderName + "/" + pictureId + ".jpg";
-        try {
-            S3Object s3object = amazonS3.getObject(new GetObjectRequest(awsQueryUrl, url));
+        try (S3Object s3object = amazonS3.getObject(new GetObjectRequest(awsQueryUrl, url));
+             InputStream objectContent = s3object.getObjectContent()) {
 
-            InputStream objectContent = s3object.getObjectContent();
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            int length;
-            byte[] buffer = new byte[4096];
-            while ((length = objectContent.read(buffer, 0, buffer.length)) != -1) {
-                outputStream.write(buffer, 0, length);
-            }
-            return outputStream;
+            return readImageData(objectContent);
         } catch (IOException ioException) {
             throw new RuntimeException(ioException.getMessage());
         }
     }
 
+    private ByteArrayOutputStream readImageData(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[4096];
+        int length;
+        while ((length = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, length);
+        }
+        return outputStream;
+    }
+
     public PictureServiceImp(AmazonS3 amazonS3) {
         this.amazonS3 = amazonS3;
     }
+}

@@ -2,8 +2,6 @@ package com.botbackendrest.controller;
 
 import com.botbackendrest.entity.User;
 import com.botbackendrest.service.userService.UserService;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

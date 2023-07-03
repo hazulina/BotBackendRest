@@ -32,7 +32,7 @@ public class WeatherServiceImpl implements WeatherService {
         URI url = new UriTemplate(weatherUrl).expand(cityName, apiKey, lang);
         ResponseEntity<String> response;
         response = restTemplate.getForEntity(url, String.class);
-        System.out.println(response.getBody());
+        log.info(response.getBody());
         return convertJsonToDto(response.getBody());
     }
 
@@ -45,19 +45,26 @@ public class WeatherServiceImpl implements WeatherService {
     private WeatherDto convertJsonToDto(String response) {
         try {
             JsonNode node = objectMapper.readTree(response);
+            JsonNode weatherNode = node.path("weather").get(0);
+            JsonNode mainNode = node.path("main");
+            JsonNode windNode = node.path("wind");
+
             WeatherDto weatherDto = new WeatherDto(
                     node.path("id").asInt(),
                     node.path("name").asText(),
-                    node.path("weather").get(0).path("main").asText(),
-                    node.path("weather").get(0).path("description").asText(),
-                    BigDecimal.valueOf(node.path("main").path("temp").asDouble()),
-                    BigDecimal.valueOf(node.path("main").path("feels_like").asDouble()),
-                    BigDecimal.valueOf(node.path("wind").path("speed").asDouble()));
+                    weatherNode.path("main").asText(),
+                    weatherNode.path("description").asText(),
+                    BigDecimal.valueOf(mainNode.path("temp").asDouble()),
+                    BigDecimal.valueOf(mainNode.path("feels_like").asDouble()),
+                    BigDecimal.valueOf(windNode.path("speed").asDouble())
+            );
+
             weatherDto.setPictureFromCloudStorage(
                     pictureService.getPictureById(
                                     weatherDto.getWeatherType().toLowerCase(),
                                     String.valueOf(getRandomPictureFromCloudStorage()))
                             .toByteArray());
+
             return weatherDto;
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Error parsing JSON", e);

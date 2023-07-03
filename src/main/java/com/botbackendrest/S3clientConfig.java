@@ -14,7 +14,6 @@ public class S3clientConfig {
 
     @Value("${s3.credentials.key.id}")
     private String awsKeyId;
-
     @Value("${s3.credentials.key}")
     private String awsKey;
     @Value("${s3.service.endpoint}")
@@ -27,8 +26,7 @@ public class S3clientConfig {
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsKeyId, awsKey);
         return AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-                .withEndpointConfiguration(
-                        new AmazonS3ClientBuilder.EndpointConfiguration(awsEndpointUrl, signingRegion))
+                .withEndpointConfiguration(new AmazonS3ClientBuilder.EndpointConfiguration(awsEndpointUrl, signingRegion))
                 .build();
     }
 }

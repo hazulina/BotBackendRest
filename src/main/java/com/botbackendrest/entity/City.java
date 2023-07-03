@@ -6,7 +6,7 @@ import lombok.Data;
 @Entity
 @Table(name = "cities")
 @Data
-public class City extends Structures{
+public class City extends Structures {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
