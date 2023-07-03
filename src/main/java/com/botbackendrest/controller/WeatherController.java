@@ -1,5 +1,6 @@
 package com.botbackendrest.controller;
 
+import com.botbackendrest.entity.WeatherDto;
 import com.botbackendrest.service.weatherService.WeatherService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -11,12 +12,8 @@ public class WeatherController {
     private final WeatherService weatherService;
 
     @GetMapping("/{cityName}/{lang}")
-    public String getCurrentWeather(@PathVariable String cityName, @PathVariable String lang){
-        try{
+    public WeatherDto getCurrentWeather(@PathVariable String cityName, @PathVariable String lang){
             return weatherService.getCurrentWeatherByCityName(cityName, lang);
-        } catch (Exception e) {
-            return e.getMessage();
-        }
     }
 
 }
