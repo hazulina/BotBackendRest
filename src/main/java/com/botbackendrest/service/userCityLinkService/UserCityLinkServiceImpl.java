@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class UserCityLinkServiceImp implements UserCityLinkService {
+public class UserCityLinkServiceImpl implements UserCityLinkService {
     private final UserCityLinkRepository linkRepository;
 
 
