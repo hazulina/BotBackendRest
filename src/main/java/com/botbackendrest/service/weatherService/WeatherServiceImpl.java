@@ -33,7 +33,20 @@ public class WeatherServiceImpl implements WeatherService {
         ResponseEntity<String> response;
         response = restTemplate.getForEntity(url, String.class);
         log.info(response.getBody());
-        return convertJsonToDto(response.getBody());
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return convertJsonToDto(response.getBody());
+        }
+        return getEmptyWeatherDto("null");
+    }
+
+    private WeatherDto getEmptyWeatherDto(String aNull) {
+        WeatherDto weatherDto = new WeatherDto(aNull);
+        weatherDto.setPictureFromCloudStorage(
+                pictureService.getPictureById(
+                                weatherDto.getWeatherType().toLowerCase(),
+                                String.valueOf(getRandomPictureFromCloudStorage()))
+                        .toByteArray());
+        return weatherDto;
     }
 
 

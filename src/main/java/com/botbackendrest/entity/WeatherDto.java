@@ -32,4 +32,8 @@ public class WeatherDto {
         this.feelsLikeTemp = feelsLikeTemp;
         this.windSpeed = windSpeed;
     }
+
+    public WeatherDto(String weatherType) {
+        this.weatherType = weatherType;
+    }
 }
