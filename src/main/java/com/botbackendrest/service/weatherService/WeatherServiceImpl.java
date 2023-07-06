@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriTemplate;
 
@@ -31,12 +32,18 @@ public class WeatherServiceImpl implements WeatherService {
     public WeatherDto getCurrentWeatherByCityName(String cityName, String lang) {
         URI url = new UriTemplate(weatherUrl).expand(cityName, apiKey, lang);
         ResponseEntity<String> response;
-        response = restTemplate.getForEntity(url, String.class);
-        log.info(response.getBody());
-        if (response.getStatusCode().is2xxSuccessful()) {
-            return convertJsonToDto(response.getBody());
+        WeatherDto weatherDto = new WeatherDto();
+        try {
+            response = restTemplate.getForEntity(url, String.class);
+            log.info(response.getBody());
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                weatherDto = convertJsonToDto(response.getBody());
+            }
+        } catch (HttpClientErrorException exception) {
+            weatherDto = getEmptyWeatherDto("null");
         }
-        return getEmptyWeatherDto("null");
+        return weatherDto;
     }
 
     private WeatherDto getEmptyWeatherDto(String aNull) {
