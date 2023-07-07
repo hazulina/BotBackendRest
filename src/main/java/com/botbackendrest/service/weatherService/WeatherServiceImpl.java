@@ -41,17 +41,16 @@ public class WeatherServiceImpl implements WeatherService {
                 weatherDto = convertJsonToDto(response.getBody());
             }
         } catch (HttpClientErrorException exception) {
-            weatherDto = getEmptyWeatherDto("null");
+            weatherDto = getEmptyWeatherDto("cityNotFound");
         }
         return weatherDto;
     }
 
-    private WeatherDto getEmptyWeatherDto(String aNull) {
-        WeatherDto weatherDto = new WeatherDto(aNull);
+    private WeatherDto getEmptyWeatherDto(String cityNotFound) {
+        WeatherDto weatherDto = new WeatherDto(cityNotFound);
         weatherDto.setPictureFromCloudStorage(
                 pictureService.getPictureById(
-                                weatherDto.getWeatherType().toLowerCase(),
-                                String.valueOf(getRandomPictureFromCloudStorage()))
+                                weatherDto.getWeatherType().toLowerCase(), "1")
                         .toByteArray());
         return weatherDto;
     }
